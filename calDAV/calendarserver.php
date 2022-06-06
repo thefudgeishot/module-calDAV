@@ -38,7 +38,7 @@ $server = new Sabre\DAV\Server($tree);
 if (isset($baseUri)) {
     $server->setBaseUri($baseUri);
 }
-
+$server->setBaseUri('/core/modules/calDAV/calendarserver.php');
 /* Server Plugins */
 $authPlugin = new Sabre\DAV\Auth\Plugin($authBackend);
 $server->addPlugin($authPlugin);
