@@ -20,14 +20,14 @@ along with this program.  If not, see <http:// www.gnu.org/licenses/>.
 // This file describes the module, including database tables
 
 // Basic variables
-$name        = '';            // The name of the module as it appears to users. Needs to be unique to installation. Also the name of the folder that holds the unit.
-$description = '';            // Short text description
+$name        = 'calDAV';            // The name of the module as it appears to users. Needs to be unique to installation. Also the name of the folder that holds the unit.
+$description = 'A module that adds calDAV support to the gibbon platform.';            // Short text description
 $entryURL    = "index.php";   // The landing page for the unit, used in the main menu
 $type        = "Additional";  // Do not change.
-$category    = '';            // The main menu area to place the module in
-$version     = '';            // Version number
-$author      = '';            // Your name
-$url         = '';            // Your URL
+$category    = 'Learn';            // The main menu area to place the module in
+$version     = '0.0.1';            // Version number
+$author      = 'Ashton Powers, Vaughan Lowe';            // Your name
+$url         = 'http://localhost/';            // Your URL
 
 // Module tables & gibbonSettings entries
 $moduleTables[] = ''; // One array entry for every database table you need to create. Might be nice to preface the table name with the module name, to keep the db neat. 

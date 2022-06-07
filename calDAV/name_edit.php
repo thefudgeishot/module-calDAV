@@ -20,7 +20,7 @@ along with this program. If not, see <http://www.gnu.org/licenses/>.
 // Module includes
 require_once __DIR__ . '/moduleFunctions.php';
 
-if (!isActionAccessible($guid, $connection2, '/modules/Module Name/name_edit.php')) {
+if (!isActionAccessible($guid, $connection2, '/modules/calDAV/name_edit.php')) {
 	// Access denied
 	$page->addError(__('You do not have access to this action.'));
 } else {
