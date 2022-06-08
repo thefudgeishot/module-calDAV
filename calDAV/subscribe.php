@@ -17,3 +17,97 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+use Gibbon\Forms\Form;
+use Gibbon\Forms\DatabaseFormFactory;
+use Gibbon\Tables\DataTable;
+use Gibbon\Services\Format;
+use Gibbon\Domain\Timetable\CourseGateway;
+use Gibbon\Domain\School\SchoolYearGateway;
+
+if (isActionAccessible($guid, $connection2, '/modules/calDAV/subscribe.php') == false) {
+    // Access denied
+    $page->addError(__('You do not have access to this action.'));
+} else {
+    //Proceed!
+    $page->breadcrumbs->add(__('Generate calDAV Per Class'));
+
+    $gibbonSchoolYearID = $_REQUEST['gibbonSchoolYearID'] ?? $session->get('gibbonSchoolYearID');
+    $nextYear = $container->get(SchoolYearGateway::class)->getNextSchoolYearByID($gibbonSchoolYearID);
+
+    if ($gibbonSchoolYearID != '') {
+        $page->navigator->addSchoolYearNavigation($gibbonSchoolYearID);
+
+        $search = (isset($_GET['search']))? $_GET['search'] : '';
+        $gibbonYearGroupID = (isset($_GET['gibbonYearGroupID']))? $_GET['gibbonYearGroupID'] : '';
+
+        $courseGateway = $container->get(CourseGateway::class);
+
+        // CRITERIA
+        $criteria = $courseGateway->newQueryCriteria(true)
+            ->searchBy($courseGateway->getSearchableColumns(), $search)
+            ->sortBy(['gibbonCourse.nameShort', 'gibbonCourse.name'])
+            ->filterBy('yearGroup', $gibbonYearGroupID)
+            ->fromPOST();
+
+        echo '<h3>';
+        echo __('Filters');
+        echo '</h3>';
+
+        $form = Form::create('action', $session->get('absoluteURL').'/index.php','get');
+
+        $form->setFactory(DatabaseFormFactory::create($pdo));
+        $form->setClass('noIntBorder fullWidth');
+
+        $form->addHiddenValue('q', "/modules/".$session->get('module')."/subscribe.php");
+        $form->addHiddenValue('gibbonSchoolYearID', $gibbonSchoolYearID);
+
+        $row = $form->addRow();
+            $row->addLabel('search', __('Search For'));
+            $row->addTextField('search')->setValue($criteria->getSearchText());
+
+        $row = $form->addRow();
+            $row->addLabel('gibbonYearGroupID', __('Year Group'));
+            $row->addSelectYearGroup('gibbonYearGroupID')->selected($criteria->getFilterValue('yearGroup'));
+
+        $row = $form->addRow();
+            $row->addSearchSubmit($gibbon->session, __('Clear Filters'), array('gibbonSchoolYearID'));
+
+        echo $form->getOutput();
+
+        echo '<h3>';
+        echo __('View');
+        echo '</h3>';
+
+        $courses = $courseGateway->queryCoursesBySchoolYear($criteria, $gibbonSchoolYearID);
+
+        // DATA TABLE
+        $table = DataTable::createPaginated('courseManage', $criteria);
+
+        $table->addHeaderAction('NoIcon', __('Generate all calDAV files'))
+            ->setURL('/modules/calDAV/calDAV_generate_all.php')
+            ->modalWindow()
+            ->displayLabel();
+
+        // COLUMNS
+        $table->addColumn('nameShort', __('Short Name'));
+        $table->addColumn('name', __('Name'));
+        $table->addColumn('department', __('Learning Area'));
+        $table->addColumn('classCount', __('Classes'));
+
+        // ACTIONS
+        $table->addActionColumn()
+            ->addParam('gibbonSchoolYearID', $gibbonSchoolYearID)
+            ->addParam('gibbonCourseID')
+            ->addParam('search', $criteria->getSearchText(true))
+            ->format(function ($course, $actions) {
+                $actions->addAction('edit', __('Generate calDAV'))
+                        ->setIcon('refresh')
+                        ->setURL('/modules/Timetable Admin/calDAV_generate_class.php');
+
+                $actions->addAction('delete', __('Delete calDAV'))
+                        ->setURL('/modules/Timetable Admin/calDAV_delete_class.php');
+            });
+
+        echo $table->render($courses);
+    }
+}

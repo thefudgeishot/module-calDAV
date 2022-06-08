@@ -16,4 +16,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+echo '<h3>';
+echo __('This process can use a significant amount of server resources, only run this process if you are sure an indiviual calDAV generation will not work');
+echo '</h3>';
