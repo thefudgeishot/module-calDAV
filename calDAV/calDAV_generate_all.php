@@ -16,6 +16,31 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-echo '<h3>';
-echo __('This process can use a significant amount of server resources, only run this process if you are sure an indiviual calDAV generation will not work');
-echo '</h3>';
+use Gibbon\Domain\System\SettingGateway;
+use Gibbon\Forms\Form;
+
+/*
+if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all.php') == false) {
+    // Access denied
+    $page->addError(__('You do not have access to this action.'));
+} else {
+*/
+    //Proceed!
+    $page->breadcrumbs->add(__('calDAV Generate All'));
+
+    $form = Form::create('calDAVSettings', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_generate_all_process.php');
+
+    $form->addHiddenValue('address', $session->get('address'));
+
+    $row = $form->addRow()->addHeading('CalDAV Sync Users', __('CalDAV Sync Users'));
+    $row = $form->addRow()->addSubHeading('This process will add/update all gibbon users into the calDAV database.', __('This process will add/update all gibbon users into the calDAV database.'));
+
+    $row = $form->addRow();
+    $row->addLabel('password', __('Default Password'))->description(__('This will be the default password for users created by this process, should be changed by the user later.'));
+    $row->addTextField('password')->required();
+
+    $row = $form->addRow();
+        $row->addFooter();
+        $row->addSubmit();
+
+    echo $form->getOutput();
