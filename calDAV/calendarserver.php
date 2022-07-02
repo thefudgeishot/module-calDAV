@@ -27,6 +27,11 @@ $authBackend = new Sabre\DAV\Auth\Backend\PDO($pdo);
 $calendarBackend = new Sabre\CalDAV\Backend\PDO($pdo);
 $principalBackend = new Sabre\DAVACL\PrincipalBackend\PDO($pdo);
 
+//Realm set
+$authBackend->setRealm('SabreDAV');
+$calendarBackend->setRealm('SabreDAV');
+$principalBackend->setRealm('SabreDAV');
+
 // Directory structure
 $tree = [
     new Sabre\CalDAV\Principal\Collection($principalBackend),
