@@ -18,6 +18,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 use Gibbon\Domain\System\SettingGateway;
 use Gibbon\Forms\Form;
+use Gibbon\Forms\DatabaseFormFactory;
+use Gibbon\Tables\DataTable;
+use Gibbon\Services\Format;
+use Gibbon\Domain\Timetable\CourseGateway;
+use Gibbon\Domain\School\SchoolYearGateway;
+
 
 /*
 if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all.php') == false) {
@@ -26,6 +32,7 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
 } else {
 */
     //Proceed!
+    // calDAV sync form
     $page->breadcrumbs->add(__('calDAV Generate All'));
 
     $form = Form::create('calDAVSettings', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_generate_all_process.php');
@@ -44,3 +51,5 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
         $row->addSubmit();
 
     echo $form->getOutput();
+    // User List
+    

@@ -16,14 +16,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
-
+use Gibbon\Data\Validator;
 use Gibbon\Http\Url;
-use Gibbon\Domain\User\UserGateway;
 use Gibbon\Module\calDAV\Domain\CalDAVUserGateway;
+use Gibbon\Domain\User\UserGateway;
 
-include './gibbon.php';
+require_once '../../gibbon.php';
+$URL = $session->get('absoluteURL').'/index.php?q=/modules/calDAV/calDAV_preferences_process.php';
 
-// Most things stolen from preferencesProcess.php in core
 
 // Define CalDAVUsers gateway
 $CalDAVUserGateway = $container->get(CalDAVUserGateway::class);

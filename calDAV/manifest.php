@@ -24,8 +24,8 @@ $name        = 'calDAV';            // The name of the module as it appears to u
 $description = 'A module that adds calDAV backend to the gibbon platform.';            // Short text description
 $entryURL    = "calDAV_generate_all.php";   // The landing page for the unit, used in the main menu
 $type        = "Additional";  // Do not change.
-$category    = 'Admin';            // The main menu area to place the module in
-$version     = '0.0.4';            // Version number
+$category    = 'Other';            // The main menu area to place the module in
+$version     = '0.0.5';            // Version number
 $author      = 'Vaughan Lowe, Ashton Power';            // Your name
 $url         = 'http://localhost/';            // Your URL
 
