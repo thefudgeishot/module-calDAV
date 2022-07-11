@@ -17,13 +17,11 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 use Gibbon\Data\Validator;
-use Gibbon\Http\Url;
-use Gibbon\Module\calDAV\Domain\CalDAVUserGateway;
 use Gibbon\Domain\User\UserGateway;
+use Gibbon\Module\calDAV\Domain\CalDAVUserGateway;
 
 require_once '../../gibbon.php';
 $URL = $session->get('absoluteURL').'/index.php?q=/modules/calDAV/calDAV_preferences_process.php';
-
 
 // Define CalDAVUsers gateway
 $CalDAVUserGateway = $container->get(CalDAVUserGateway::class);
@@ -38,24 +36,28 @@ $realm = 'SabreDAV'; // Should be called from sabre/dav and not defined here | S
 
 //Check passwords are not blank
 if ($passwordNew == '' or $passwordConfirm == '') {
-    header("Location: {$URL->withReturn('error1')}");
+    $URL .= "&return=error1";
+    header("Location: {$URL}");
 } else {
     //Check strength of password
     $passwordMatch = doesPasswordMatchPolicy($connection2, $passwordNew);
 
     if ($passwordMatch == false) {
-        header("Location: {$URL->withReturn('error6')}");
+        $URL .= "&return=error6";
+        header("Location: {$URL}");
     } else {
         //Check new passwords match
         if ($passwordNew != $passwordConfirm) {
-            header("Location: {$URL->withReturn('error4')}");
+            $URL .= "&return=error4";
+            header("Location: {$URL}");
         } else {
             //Hash and write password
-            $hash = md5($user['username'] . ':' . $realm . ':' . $password); // Hashes the salted password
+            $hash = md5($user['username'] . ':' . $realm . ':' . $passwordNew); // Hashes the salted password
             $user = $CalDAVUserGateway->selectBy([$gibbon->session->get('username') => $username])->fetch();
             $update = $CalDAVUserGateway->update($user, ['digesta1' => $hash]);
             //Success!
-            header("Location: {$URL->withReturn('success0')}");
+            $URL .= "&return=success0";
+            header("Location: {$URL}");
         }
     }
 }
