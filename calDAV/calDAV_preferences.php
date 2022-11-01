@@ -31,6 +31,7 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
     $form = Form::create('calDAVPreferences', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_preferences_process.php');
     $row = $form->addRow()->addHeading('Change CalDAV Password', __('Change CalDAV Password'));
     // Mostlty stolen code from preferences.php in core
+    $form->addHiddenValue('address', $session->get('address'));
     $policy = getPasswordPolicy($guid, $connection2);
     if ($policy != false) {
         $form->addRow()->addAlert($policy, 'warning');

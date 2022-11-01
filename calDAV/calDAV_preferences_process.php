@@ -23,6 +23,9 @@ use Gibbon\Module\calDAV\Domain\CalDAVUserGateway;
 require_once '../../gibbon.php';
 $URL = $session->get('absoluteURL').'/index.php?q=/modules/calDAV/calDAV_preferences_process.php';
 
+// Define user gateway
+$userGateway = $container->get(UserGateway::class);
+$criteria = $userGateway->newQueryCriteria()->fromPOST();
 // Define CalDAVUsers gateway
 $CalDAVUserGateway = $container->get(CalDAVUserGateway::class);
 $criteria = $CalDAVUserGateway->newQueryCriteria()->fromPOST();

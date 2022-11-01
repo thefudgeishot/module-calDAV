@@ -25,12 +25,11 @@ use Gibbon\Services\Format;
 use Gibbon\Domain\Students\StudentGateway;
 use Gibbon\Domain\Staff\StaffGateway;
 
-/*
+
 if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all.php') == false) {
     // Access denied
     $page->addError(__('You do not have access to this action.'));
 } else {
-*/
     //Proceed!
     // calDAV sync form
     $page->breadcrumbs->add(__('calDAV Generate All'));
@@ -53,12 +52,12 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
     echo $form->getOutput();
     // User List
     $highestAction = getHighestGroupedAction($guid, $_GET['q'], $connection2);
+    var_dump($highestAction);
     if ($highestAction == false) {
         echo "<div class='error'>";
         echo __('The highest grouped action cannot be determined.');
         echo '</div>';
     } else {
-        $page->breadcrumbs->add(__('View Timetable by Person'));
 
         $gibbonPersonID = isset($_GET['gibbonPersonID']) ? $_GET['gibbonPersonID'] : null;
         $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -77,11 +76,11 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
                 ->fromPOST();
 
 
-            $form = Form::create('ttView', $session->get('absoluteURL').'/index.php', 'get');
+            $form = Form::create('calDavGen', $session->get('absoluteURL').'/index.php', 'get');
             $form->setClass('noIntBorder fullWidth');
             $form->setTitle(__('Search'));
 
-            $form->addHiddenValue('q', '/modules/'.$session->get('module').'/tt.php');
+            $form->addHiddenValue('q', '/modules/'.$session->get('module').'/calDAV_generate_all.php');
 
             $row = $form->addRow();
                 $row->addLabel('search', __('Search For'))->description(__('Preferred, surname, username.'));
@@ -182,3 +181,4 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
 
         echo $table->render($users);
     }
+}
