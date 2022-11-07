@@ -21,11 +21,11 @@ along with this program.  If not, see <http:// www.gnu.org/licenses/>.
 
 // Basic variables
 $name        = 'calDAV';            // The name of the module as it appears to users. Needs to be unique to installation. Also the name of the folder that holds the unit.
-$description = 'A module that adds calDAV backend to the gibbon platform.';            // Short text description
-$entryURL    = "calDAV_generate_all.php";   // The landing page for the unit, used in the main menu
+$description = 'A module that adds a calDAV backend to the gibbon platform.';            // Short text description
+$entryURL    = "calDAV_preferences.php";   // The landing page for the unit, used in the main menu
 $type        = "Additional";  // Do not change.
 $category    = 'Other';            // The main menu area to place the module in
-$version     = '0.0.5';            // Version number
+$version     = '0.0.92';            // Version number
 $author      = 'Vaughan Lowe, Ashton Power';            // Your name
 $url         = 'http://localhost/';            // Your URL
 
@@ -162,11 +162,6 @@ $moduleTables[] = "CREATE TABLE groupmembers (
     UNIQUE(principal_id, member_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
-$moduleTables[] = "INSERT INTO principals (uri,email,displayname) VALUES
-('principals/admin', 'admin@example.org','Administrator'),
-('principals/admin/calendar-proxy-read', null, null),
-('principals/admin/calendar-proxy-write', null, null);";
-
 $moduleTables[] = "CREATE TABLE propertystorage (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     path VARBINARY(1024) NOT NULL,
@@ -184,8 +179,6 @@ $moduleTables[] = "CREATE TABLE users (
     UNIQUE(username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
-$moduleTables[] = "INSERT INTO users (username,digesta1) VALUES
-('admin',  '87fd274b7b6c01e48d7c2f965da8ddf7');";
 
 
 // Add gibbonSettings entries
@@ -194,13 +187,13 @@ $moduleTables[] = "INSERT INTO users (username,digesta1) VALUES
 // Action rows
 // One array per action
 $actionRows[] = [
-    'name'                      => 'Subscribe', // The name of the action (appears to user in the right hand side module menu)
+    'name'                      => 'User Settings', // The name of the action (appears to user in the right hand side module menu)
     'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
     'category'                  => '', // Optional: subgroups for the right hand side module menu
     'description'               => '', // Text description
-    'URLList'                   => 'subscribe.php,calDAV_generate_all.php', // List of pages included in this action
-    'entryURL'                  => 'subscribe.php', // The landing action for the page.
-    'entrySidebar'              => 'N', // Whether or not there's a sidebar on entry to the action
+    'URLList'                   => 'calDAV_preferences.php', // List of pages included in this action
+    'entryURL'                  => 'calDAV_preferences.php', // The landing action for the page.
+    'entrySidebar'              => 'Y', // Whether or not there's a sidebar on entry to the action
     'menuShow'                  => 'Y', // Whether or not this action shows up in menus or if it's hidden
     'defaultPermissionAdmin'    => 'Y', // Default permission for built in role Admin
     'defaultPermissionTeacher'  => 'Y', // Default permission for built in role Teacher
@@ -211,6 +204,26 @@ $actionRows[] = [
     'categoryPermissionStudent' => 'Y', // Should this action be available to user roles in the Student category?
     'categoryPermissionParent'  => 'Y', // Should this action be available to user roles in the Parent category?
     'categoryPermissionOther'   => 'Y', // Should this action be available to user roles in the Other category?
+];
+
+$actionRows[] = [
+    'name'                      => 'Admin Settings', // The name of the action (appears to user in the right hand side module menu)
+    'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
+    'category'                  => '', // Optional: subgroups for the right hand side module menu
+    'description'               => 'test', // Text description
+    'URLList'                   => 'calDAV_generate_all.php', // List of pages included in this action
+    'entryURL'                  => 'calDAV_generate_all.php', // The landing action for the page.
+    'entrySidebar'              => 'Y', // Whether or not there's a sidebar on entry to the action
+    'menuShow'                  => 'Y', // Whether or not this action shows up in menus or if it's hidden
+    'defaultPermissionAdmin'    => 'Y', // Default permission for built in role Admin
+    'defaultPermissionTeacher'  => 'N', // Default permission for built in role Teacher
+    'defaultPermissionStudent'  => 'N', // Default permission for built in role Student
+    'defaultPermissionParent'   => 'N', // Default permission for built in role Parent
+    'defaultPermissionSupport'  => 'N', // Default permission for built in role Support
+    'categoryPermissionStaff'   => 'N', // Should this action be available to user roles in the Staff category?
+    'categoryPermissionStudent' => 'N', // Should this action be available to user roles in the Student category?
+    'categoryPermissionParent'  => 'N', // Should this action be available to user roles in the Parent category?
+    'categoryPermissionOther'   => 'N', // Should this action be available to user roles in the Other category?
 ];
 
 // Hooks

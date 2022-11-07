@@ -18,13 +18,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 use Gibbon\Domain\System\SettingGateway;
 use Gibbon\Forms\Form;
+use Gibbon\Module\calDAV\Domain\CalDAVUserGateway;
+use Gibbon\Domain\User\UserGateway;
 
-/*
-if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all.php') == false) {
+// Define CalDAVUsers gateway
+$CalDAVUserGateway = $container->get(CalDAVUserGateway::class);
+$criteria = $CalDAVUserGateway->newQueryCriteria()->fromPOST();
+
+// Define User gateway
+$userGateway = $container->get(UserGateway::class);
+$criteria = $userGateway->newQueryCriteria()->fromPOST();
+$users = $userGateway->selectBy(['status' => 'FULL']);
+
+if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_preferences.php') == false) {
     // Access denied
     $page->addError(__('You do not have access to this action.'));
 } else {
-*/
+    $user = $users->fetch();
+    $calDAVUser = $CalDAVUserGateway->selectBy(['username' => $user['username']])->fetch();
+    if ($calDAVUser == false) {
+        // User does not have an account
+        $page->addError(__('You do not have a calDAV account, please notify your system admin if you believe this is an error.'));
+    } else {
     //Proceed!
     $page->breadcrumbs->add(__('CalDav Preferences'));
 
@@ -57,3 +72,5 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
         $row->addSubmit();
 
     echo $form->getOutput();
+    }
+}
