@@ -36,41 +36,82 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_preferences.
 } else {
     $user = $users->fetch();
     $calDAVUser = $CalDAVUserGateway->selectBy(['username' => $user['username']])->fetch();
-    if ($calDAVUser == false) {
-        // User does not have an account
+    $settingGateway = $container->get(SettingGateway::class);
+    $setting = $settingGateway->getSettingByScope('CalDAV', 'usersGenerateAccount', true);
+    if ($calDAVUser == false && $setting['value'] == 'N') {
+        // User does not have an account and can't make one
         $page->addError(__('You do not have a calDAV account, please notify your system admin if you believe this is an error.'));
+    } elseif ($calDAVUser == false && $setting['value'] == 'Y') {
+        // User does not have an account but can make one
+        $form = Form::create('calDAVPreferences', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_preferences_generate_account_process.php');
+        $row = $form->addRow()->addHeading('Generate CalDAV Account', __('Generate CalDAV Account'));
+        // Mostlty stolen code from preferences.php in core
+        $form->addHiddenValue('address', $session->get('address'));
+        $policy = getPasswordPolicy($guid, $connection2);
+        if ($policy != false) {
+            $form->addRow()->addAlert($policy, 'warning');
+        }
+        $row = $form->addRow();
+            $row->addLabel('username', __("Username"));
+            $row->addTextField('username')->required()->readOnly()->setValue($user['username']);
+
+        $row = $form->addRow();
+            $row->addLabel('email', __("Email Address"));
+            $row->addTextField('email')->required()->readOnly()->setValue($user['email']);
+
+        $row = $form->addRow();
+            $row->addLabel('passwordNew', __('New Password'));
+            $row->addPassword('passwordNew')
+                ->addPasswordPolicy($pdo)
+                ->addGeneratePasswordButton($form)
+                ->required()
+                ->maxLength(30);
+    
+        $row = $form->addRow();
+            $row->addLabel('passwordConfirm', __('Confirm New Password'));
+            $row->addPassword('passwordConfirm')
+                ->addConfirmation('passwordNew')
+                ->required()
+                ->maxLength(30);
+    
+        $row = $form->addRow();
+            $row->addFooter();
+            $row->addSubmit();
+    
+        echo $form->getOutput();
     } else {
-    //Proceed!
-    $page->breadcrumbs->add(__('CalDav Preferences'));
+        // User has an account and is trying to change password
+        $page->breadcrumbs->add(__('CalDav Preferences'));
 
-    $form = Form::create('calDAVPreferences', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_preferences_process.php');
-    $row = $form->addRow()->addHeading('Change CalDAV Password', __('Change CalDAV Password'));
-    // Mostlty stolen code from preferences.php in core
-    $form->addHiddenValue('address', $session->get('address'));
-    $policy = getPasswordPolicy($guid, $connection2);
-    if ($policy != false) {
-        $form->addRow()->addAlert($policy, 'warning');
-    }
+        $form = Form::create('calDAVPreferences', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_preferences_process.php');
+        $row = $form->addRow()->addHeading('Change CalDAV Password', __('Change CalDAV Password'));
+        // Mostlty stolen code from preferences.php in core
+        $form->addHiddenValue('address', $session->get('address'));
+        $policy = getPasswordPolicy($guid, $connection2);
+        if ($policy != false) {
+            $form->addRow()->addAlert($policy, 'warning');
+        }
 
-    $row = $form->addRow();
-        $row->addLabel('passwordNew', __('New Password'));
-        $row->addPassword('passwordNew')
-            ->addPasswordPolicy($pdo)
-            ->addGeneratePasswordButton($form)
-            ->required()
-            ->maxLength(30);
+        $row = $form->addRow();
+            $row->addLabel('passwordNew', __('New Password'));
+            $row->addPassword('passwordNew')
+                ->addPasswordPolicy($pdo)
+                ->addGeneratePasswordButton($form)
+                ->required()
+                ->maxLength(30);
 
-    $row = $form->addRow();
-        $row->addLabel('passwordConfirm', __('Confirm New Password'));
-        $row->addPassword('passwordConfirm')
-            ->addConfirmation('passwordNew')
-            ->required()
-            ->maxLength(30);
+        $row = $form->addRow();
+            $row->addLabel('passwordConfirm', __('Confirm New Password'));
+            $row->addPassword('passwordConfirm')
+                ->addConfirmation('passwordNew')
+                ->required()
+                ->maxLength(30);
 
-    $row = $form->addRow();
-        $row->addFooter();
-        $row->addSubmit();
+        $row = $form->addRow();
+            $row->addFooter();
+            $row->addSubmit();
 
-    echo $form->getOutput();
+        echo $form->getOutput();
+    
     }
 }

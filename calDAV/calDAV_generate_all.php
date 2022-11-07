@@ -181,6 +181,12 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
             ->setURL('/modules/calDAV/calDAV_generate_all_change_password.php')
             ->addParam('username', $person['username'])
             ->setIcon('key');
+
+            $actions->addAction('removeAccount', __('Remove account'))
+            ->modalWindow()
+            ->setURL('/modules/calDAV/calDAV_generate_all_delete_account.php') // TODO: DO THIS!!!
+            ->addParam('username', $person['username'])
+            ->setIcon('garbage');
         }
         if ($calDAVUser == false) {
             $actions->addAction('genAccount', __('Generate Account'))

@@ -16,14 +16,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
+use Gibbon\Data\Validator;
+use Gibbon\Domain\System\SettingGateway;
 
-// Module includes
-require_once __DIR__ . '/moduleFunctions.php';
 
-if (!isActionAccessible($guid, $connection2, "/modules/calDAV/name_add.php")) {
-	// Access denied
-	$page->addError(__('You do not have access to this action.'));
-} else {
-   // For a form
-   // Check out https:// gist.github.com/SKuipers/3a4de3a323ab9d0969951894c29940ae for a cheatsheet / guide
-}	
+require_once '../../gibbon.php';
+$URL = $session->get('absoluteURL').'/index.php?q=/modules/calDAV/calDAV_settings.php';
+
+$output = $_POST["usersGenerateAccount"];
+
+$settingGateway = $container->get(SettingGateway::class);
+$setting = $settingGateway->updateSettingByScope('CalDAV', 'usersGenerateAccount', $output);
+
+$URL .= "&return=success0"; 
+header("Location: {$URL}");

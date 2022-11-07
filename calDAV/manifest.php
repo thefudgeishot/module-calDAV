@@ -25,7 +25,7 @@ $description = 'A module that adds a calDAV backend to the gibbon platform.';   
 $entryURL    = "calDAV_preferences.php";   // The landing page for the unit, used in the main menu
 $type        = "Additional";  // Do not change.
 $category    = 'Other';            // The main menu area to place the module in
-$version     = '0.0.92';            // Version number
+$version     = '0.0.95';            // Version number
 $author      = 'Vaughan Lowe, Ashton Power';            // Your name
 $url         = 'http://localhost/';            // Your URL
 
@@ -179,7 +179,9 @@ $moduleTables[] = "CREATE TABLE users (
     UNIQUE(username)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
 
-
+$moduleTables[] = "INSERT INTO `gibbonSetting` (`gibbonSettingID`, `scope`, `name`, `nameDisplay`, `description`, `value`)
+    VALUES
+    (NULL, 'CalDAV', 'usersGenerateAccount', 'User Generated Account', 'Whether or not a user can generate their own account', FALSE)";
 
 // Add gibbonSettings entries
 //$gibbonSetting[] = ""; TODO: add settings to enable/disable calendar lol
@@ -207,10 +209,29 @@ $actionRows[] = [
 ];
 
 $actionRows[] = [
-    'name'                      => 'Admin Settings', // The name of the action (appears to user in the right hand side module menu)
+    'name'                      => 'Admin settings', // The name of the action (appears to user in the right hand side module menu)
     'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
     'category'                  => '', // Optional: subgroups for the right hand side module menu
     'description'               => 'test', // Text description
+    'URLList'                   => 'calDAV_settings.php', // List of pages included in this action
+    'entryURL'                  => 'calDAV_settings.php', // The landing action for the page.
+    'entrySidebar'              => 'Y', // Whether or not there's a sidebar on entry to the action
+    'menuShow'                  => 'Y', // Whether or not this action shows up in menus or if it's hidden
+    'defaultPermissionAdmin'    => 'Y', // Default permission for built in role Admin
+    'defaultPermissionTeacher'  => 'N', // Default permission for built in role Teacher
+    'defaultPermissionStudent'  => 'N', // Default permission for built in role Student
+    'defaultPermissionParent'   => 'N', // Default permission for built in role Parent
+    'defaultPermissionSupport'  => 'N', // Default permission for built in role Support
+    'categoryPermissionStaff'   => 'N', // Should this action be available to user roles in the Staff category?
+    'categoryPermissionStudent' => 'N', // Should this action be available to user roles in the Student category?
+    'categoryPermissionParent'  => 'N', // Should this action be available to user roles in the Parent category?
+    'categoryPermissionOther'   => 'N', // Should this action be available to user roles in the Other category?
+];
+$actionRows[] = [
+    'name'                      => 'CalDAV Configuration', // The name of the action (appears to user in the right hand side module menu)
+    'precedence'                => '0',// If it is a grouped action, the precedence controls which is highest action in group
+    'category'                  => '', // Optional: subgroups for the right hand side module menu
+    'description'               => '', // Text description
     'URLList'                   => 'calDAV_generate_all.php', // List of pages included in this action
     'entryURL'                  => 'calDAV_generate_all.php', // The landing action for the page.
     'entrySidebar'              => 'Y', // Whether or not there's a sidebar on entry to the action
