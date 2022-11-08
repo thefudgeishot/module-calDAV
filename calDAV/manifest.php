@@ -26,8 +26,8 @@ $entryURL    = "calDAV_preferences.php";   // The landing page for the unit, use
 $type        = "Additional";  // Do not change.
 $category    = 'Other';            // The main menu area to place the module in
 $version     = '0.1.0';            // Version number
-$author      = 'Vaughan Lowe, Ashton Power';            // Your name
-$url         = 'http://localhost/';            // Your URL
+$author      = 'Vaughan Lowe';            // Your name
+$url         = 'https://github.com/thefudgeishot/module-calDAV';            // Your URL
 
 // Module tables & gibbonSettings entries
 $moduleTables[] = "CREATE TABLE addressbooks (
