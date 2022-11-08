@@ -23,32 +23,21 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
         $page->addError(__('You do not have access to this action.'));
     } else {
         //Proceed!
-        $form = Form::create('calDAVPreferences', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_generate_all_change_password_process.php');
-        $row = $form->addRow()->addHeading('Change CalDAV Password', __('Change CalDAV Password'));
+        $form = Form::create('calDAVPreferences', $session->get('absoluteURL').'/modules/'.$session->get('module').'/calDAV_generate_all_delete_account_process.php');
+        $row = $form->addRow()->addHeading('Delete CalDAV Account', __('Delete CalDAV Account'));
         // Mostlty stolen code from preferences.php in core
         $form->addHiddenValue('address', $session->get('address'));
-        $policy = getPasswordPolicy($guid, $connection2);
-        if ($policy != false) {
-            $form->addRow()->addAlert($policy, 'warning');
-        }
+
+        $form->addRow()->addAlert('This process will likely results in the loss of data to the aflicted user. Please confirm with the user and ensure that any essential data is backed up.', 'warning');
+
         $row = $form->addRow();
             $row->addLabel('username', __("Username"));
             $row->addTextField('username')->required()->readOnly()->setValue($_GET['username']);
 
         $row = $form->addRow();
-            $row->addLabel('passwordNew', __('New Password'));
-            $row->addPassword('passwordNew')
-                ->addPasswordPolicy($pdo)
-                ->required()
-                ->maxLength(30);
-    
-        $row = $form->addRow();
-            $row->addLabel('passwordConfirm', __('Confirm New Password'));
-            $row->addPassword('passwordConfirm')
-                ->addConfirmation('passwordNew')
-                ->required()
-                ->maxLength(30);
-    
+            $row->addLabel('confirmationVar', __("Type 'CONFIRM' to confirm your action."));
+            $row->addTextField('confirmationVar')->required();
+
         $row = $form->addRow();
             $row->addFooter();
             $row->addSubmit();
@@ -57,13 +46,13 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
 
 }
 /*
-    ?>
-        <script>
-        const button = document.querySelector('#timetableSubManage input[type=submit]');
-        button.addEventListener('click', event => {
-                setTimeout(()=>{
-                  tb_remove();
-                },1000);
-          });
-        </script>
-*/
+?>
+    <script>
+    const button = document.querySelector('#timetableSubManage input[type=submit]');
+    button.addEventListener('click', event => {
+            setTimeout(()=>{
+                tb_remove();
+            },1000);
+        });
+    </script>
+    */

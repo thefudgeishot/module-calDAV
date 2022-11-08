@@ -43,7 +43,6 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
             $row->addLabel('passwordNew', __('New Password'));
             $row->addPassword('passwordNew')
                 ->addPasswordPolicy($pdo)
-                ->addGeneratePasswordButton($form)
                 ->required()
                 ->maxLength(30);
     

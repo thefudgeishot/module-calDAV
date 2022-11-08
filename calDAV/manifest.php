@@ -25,7 +25,7 @@ $description = 'A module that adds a calDAV backend to the gibbon platform.';   
 $entryURL    = "calDAV_preferences.php";   // The landing page for the unit, used in the main menu
 $type        = "Additional";  // Do not change.
 $category    = 'Other';            // The main menu area to place the module in
-$version     = '0.0.95';            // Version number
+$version     = '0.1.0';            // Version number
 $author      = 'Vaughan Lowe, Ashton Power';            // Your name
 $url         = 'http://localhost/';            // Your URL
 
