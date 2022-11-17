@@ -15,8 +15,12 @@ date_default_timezone_set('Canada/Eastern');
 // You can override the baseUri here.
 // $baseUri = '/';
 
+include '../../gibbon.php';
+
+include './moduleFunctions.php';
+
 /* Database */
-$pdo = new PDO('mysql:dbname=gibbonDEV;host=localhost', 'root', 'root'); // TODO: Make this dynamic to gibbon config
+$pdo = new PDO('mysql:dbname='. $gibbon->getConfig('databaseName') .';'.'host=localhost', $gibbon->getConfig('databaseUsername'), $gibbon->getConfig('databasePassword')); 
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 // Files we need

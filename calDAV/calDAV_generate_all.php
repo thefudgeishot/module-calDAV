@@ -184,7 +184,7 @@ if (isActionAccessible($guid, $connection2, '/modules/calDAV/calDAV_generate_all
 
             $actions->addAction('removeAccount', __('Remove account'))
             ->modalWindow()
-            ->setURL('/modules/calDAV/calDAV_generate_all_delete_account.php') // TODO: DO THIS!!!
+            ->setURL('/modules/calDAV/calDAV_generate_all_delete_account.php') 
             ->addParam('username', $person['username'])
             ->setIcon('garbage');
         }
